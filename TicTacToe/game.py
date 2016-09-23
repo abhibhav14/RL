@@ -15,7 +15,7 @@ def human(board):
     return [a, b]
 
 #minimax
-def minimax_helper(board):
+def minimax_helper(board, alpha, beta):
     if board.tie():
         return 0
     if board.win() == board.get_current_player_id():
@@ -25,17 +25,23 @@ def minimax_helper(board):
 
     bestVal = None
     for i in board.get_move_list():
-        curr_val = -1 * minimax_helper(board.makemove(*i))
+        curr_val = -1 * minimax_helper(board.makemove(*i), -beta, -alpha)
         if bestVal == None or bestVal < curr_val:
             bestVal = curr_val
+            alpha = curr_val
+            if beta <= alpha:
+                break
 
     return bestVal
 def minimax(board):
     bestVal = None
+    alpha = -1000000
+    beta = 1000000
     for i in board.get_move_list():
-        curr_val = -1 * minimax_helper(board.makemove(*i))
+        curr_val = -1 * minimax_helper(board.makemove(*i), -beta, -alpha)
         if bestVal == None or bestVal[0] < curr_val:
             bestVal = [curr_val, i[:]]
+            alpha = curr_val
     return bestVal[1]
 
 #random
@@ -71,5 +77,5 @@ def AI(board):
 # 2. minimax (needs work)
 # 3. randomMove
 # 4. AI (using trained AI)
-A = t.TicTacToeRunner(AI, minimax)
+A = t.TicTacToeRunner(minimax, human)
 A.runGame(verbose=1)

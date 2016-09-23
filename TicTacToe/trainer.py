@@ -41,7 +41,8 @@ def trainer():
     print('Training...')
     global movelist
     #Learn from a fixed number of games, one per loop
-    for i in range(50000):
+    for i in range(500000):
+        print (i)
         #Run a game with random players and get info about it
         A = t.TicTacToeRunner(randomMove, randomMove)
         w = A.runGame(verbose=-1)
