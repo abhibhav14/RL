@@ -77,5 +77,5 @@ def AI(board):
 # 2. minimax (needs work)
 # 3. randomMove
 # 4. AI (using trained AI)
-A = t.TicTacToeRunner(minimax, human)
+A = t.TicTacToeRunner(AI, human)
 A.runGame(verbose=1)
