@@ -64,11 +64,12 @@ class TicTacToeBoard:
 
     def tie(self):
         """ Returns 1 if the game is tied"""
-        for i in self._board_array:
-            for j in i:
-                if j == 0:
-                    return 0
-        return 1
+        if not self.win():
+            for i in self._board_array:
+                for j in i:
+                    if j == 0:
+                        return 0
+            return 1
 
     def win(self):
         """ Returns the id of the winner"""
