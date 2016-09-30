@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 class Agent(object):
     """Agent for Reinforcement Tic Tac Toe
     """
-    def __init__(self, player, rate=0.99, eps=0.1, lossval=0, learning=False):
+    def __init__(self, player, rate=0.99, eps=0.1, lossval=0, learning=True):
         #Stores all the params of the learning Agent
 
         self.data = dict()
@@ -26,12 +26,12 @@ class Agent(object):
         self.prev_move = None
         print('Training...')
         for i in range(games):
-            game = t.TicTacToeRunner(self.callback, opponent)
-            winner = game.runGame(verbose=-1)
-            if (winner == 3 - self.player):
-                score = self.lossval
-                old = self.data[self.prev_move]
-                self.data[self.prev_move] = old + self.rate * (score - old)
+            if self.player == 1:
+                game = t.TicTacToeRunner(self.callback, opponent)
+            elif self.player == 2:
+                game = t.TicTacToeRunner(opponent, self.callback)
+            winner = game.runGame(verbose=0)
+            self.gameEnd(winner)
             self.prev_move = None
             if winner == self.player:
                 wins += 1
@@ -39,8 +39,15 @@ class Agent(object):
             winP.append(wins / (i + 1))
 
         self.learning = tempLearnMode
+        print('Learnt')
         return winP
         
+    def gameEnd(self, winner):
+        if (winner == 3 - self.player):
+            score = self.lossval
+            old = self.data[self.prev_move]
+            self.data[self.prev_move] = old + self.rate * (score - old)
+
 
     def callback(self, board):
         #Main callback function, decides moves and calls appropriate function
@@ -123,8 +130,16 @@ def randomMove(board):
     a = random.choice(board.get_move_list())
     return a
 
-a = Agent(1)
-data = a.trainer(10000, randomMove)
-print('Plot:')
-plt.plot(data)
-plt.show()
+if __name__ == "__main__":
+    for j in range(10):
+        a = Agent(1, eps = j * 0.1)
+        b = Agent(2)
+        aWins = 0
+        for i in range(100000):
+            A = t.TicTacToeRunner(a.callback, b.callback)
+            winner = A.runGame(verbose=-1)
+            a.gameEnd(winner)
+            b.gameEnd(winner)
+            if winner == 1:
+                aWins += 1
+        print(str(j) , (aWins))

@@ -1,6 +1,8 @@
 import tictactoe as t
 import random
 import pickle
+import matplotlib.pyplot as plt
+import mTrainer as m
 
 with open('memory.pickle', 'rb') as handle:
     AImem = pickle.load(handle)
@@ -71,11 +73,17 @@ def AI(board):
     # print('----Move Done----')
     return bestVal[1]
 
+a = m.Agent(1, eps=0.05)
+datas = a.trainer(10000, minimax)
+
 #Create a TicTacToe Game Runner object with a callback for each player
 #Current available callbacks:
 # 1. human
 # 2. minimax (needs work)
 # 3. randomMove
 # 4. AI (using trained AI)
-A = t.TicTacToeRunner(AI, human)
-A.runGame(verbose=1)
+for i in range(5):
+    A = t.TicTacToeRunner(a.callback, minimax)
+    A.runGame(verbose=1)
+plt.plot(datas)
+plt.show()
