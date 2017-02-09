@@ -1,3 +1,7 @@
+# Disclaimer:
+This was me messing around with RL before I actually learnt RL, just based on the idea of rewards and maximizing them. The methods used here are not good RL methods
+
+
 # Reinforcement-Learning
 Repository to mess around with AI made using reinforcement learning
 
